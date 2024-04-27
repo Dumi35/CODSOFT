@@ -33,7 +33,7 @@ export default function Home() {
                 <Box id="hero-section" sx={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: "clamp(5px,5vh + 0.5rem,20px)", justifyContent: "center" }}>
                     <Box id="hero-content" sx={{ flexBasis: 450, flexGrow: 1 }}>
                         <Stack spacing={2}>
-                            <Typography variant="h2" color={"primary"}>Find the perfect job for you</Typography>
+                            <Typography variant="h2" color={"primary"} sx={{fontSize:{xl:"70px"}}}>Find the perfect job for you</Typography>
                             <Typography variant="h6">Search your career opportunity </Typography>
                             <div className="searchBar">
                                 <input placeholder="Add title or keyword "></input>
@@ -157,9 +157,9 @@ export default function Home() {
 
                 <Box component={"section"} marginBlock={"70px 10px"}>
                     <Typography>WHY CHOOSE US</Typography>
-                    <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", flexWrap: "wrap", gap: "clamp(5px,5vh + 0.5rem,20px)" }}>
+                    <Box sx={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: "clamp(5px,5vh + 0.5rem,20px)" }}>
                         <Box id="content" sx={{ flexBasis: 400, flexGrow: 1 }}>
-                            <Stack spacing={2} alignItems={{ xs: "center", lg: "flex-start" }} justifyContent={"center"}>
+                            <Box alignItems={{ xs: "center", lg: "flex-start" }} justifyContent={{ xs: "center", lg: "flex-start" }} display={"flex"} flexWrap={"wrap"} gap={2}>
                                 <Typography variant="h4" textTransform={"capitalize"}>We know just what you want and we can give it to you</Typography>
                                 <Card sx={{ width: "min(100%,350px)", alignItems: "center", display: "flex", flexDirection: "column", boxShadow: "0px 10px 2px #F5F5F5", borderRadius: "30px", paddingTop: 3 }} >
                                     <Stack sx={{ background: "#fff", borderRadius: "10px", padding: "5px 10px", alignItems: "center", justifyContent: "center" }}>
@@ -188,11 +188,11 @@ export default function Home() {
                                     </CardContent>
                                 </Card>
 
-                            </Stack>
+                            </Box>
 
                         </Box>
 
-                        <Box sx={{ flexBasis: 500, alignSelf: "center" }}>
+                        <Box sx={{ flexBasis: 600, alignSelf: "center" }}>
                             <img src={employee} width={"100%"} />
                         </Box>
 

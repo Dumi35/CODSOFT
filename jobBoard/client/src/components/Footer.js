@@ -7,7 +7,7 @@ import "../App.css"
 export default function Footer() {
     return (
         <footer style={{background:"transparent",overflow:"hidden"}}>
-            <img src={wave1}/>
+            <img src={wave1} width={"100%"} />
             <Box sx={{
                 display: "flex",
                 gap: "4rem",//clamp
