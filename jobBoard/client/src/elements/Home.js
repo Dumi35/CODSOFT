@@ -10,6 +10,8 @@ import employee from "../assets/images/Employee of the month-pana.png"
 import DrawerAppBar from "../components/AppBar";
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 
+import SignUp from "./signUp";
+
 import { grey100 } from "../App";
 import { grey200 } from "../App";
 import "../App.css"
@@ -18,7 +20,8 @@ import Footer from "../components/Footer";
 export default function Home() {
     return (
         <Box>
-            
+            <DrawerAppBar />
+
             <Box sx={{
                 paddingBlock:
                     { xs: 3, md: 0 },

@@ -74,14 +74,16 @@ const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          textTransform: "capitalize"
+          textTransform: "capitalize",
+          borderRadius: "20px",
+          width:"150px"
         },
         containedPrimary: {
-          backgroundColor: 'EFA803',
+          backgroundColor: blue200,
           color: 'white',
           '&:hover': {
             backgroundColor: 'white',
-            color: '#EFA803',
+            color: blue200,
           },
         },
         containedSecondary: { // Overrides for secondary contained buttons
@@ -103,7 +105,6 @@ function App() {
   return (
     <ThemeProvider theme={theme} >
       <Router>
-        <DrawerAppBar />
         <Routes>
           <Route path="/" element={<Home/>} />
           <Route path="/home" element={<Home/>} />
