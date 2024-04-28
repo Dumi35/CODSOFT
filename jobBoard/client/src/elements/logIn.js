@@ -14,10 +14,9 @@ import { useRef, useState } from "react";
 
 import bcrypt from 'bcryptjs'
 
-export default function SignUp() {
+export default function LogIn() {
     const email = useRef("")
     const password = useRef("")
-    const role = useRef("Job seeker")
 
     const [showPassword, setShowPassword] = useState(false);
     const [showEmailError, setShowEmailError] = useState(false)
@@ -29,29 +28,22 @@ export default function SignUp() {
 
     const handleSubmit = (event) => {
         event.preventDefault()
-        
-        const salt = bcrypt.genSaltSync(10)
-        const hashedPassword = bcrypt.hashSync(password.current, salt)
 
-        axios.get(`${SERVER_HOST}/signup`, {
-            params: { email: email.current }
+        axios.get(`${SERVER_HOST}/login`, {
+            params: { email: email.current}
         }).then((res) => {
-            console.log(res.data)
-            if (res.data.length>0) {
-                setShowEmailError(true)
-            } else {
+            const salt = res.data[0].salt
+            const hashedPassword = bcrypt.hashSync(password.current, salt)
+            if(hashedPassword === res.data[0].hashedPassword){                
                 setShowEmailError(false)
-                axios.post(`${SERVER_HOST}/signup`, {
-                    email: email.current,
-                    hashedPassword: hashedPassword,
-                    salt: salt,
-                    role: role.current
-                }).then(() => {
-                }).catch((error) => {
-                    console.error("error ", error)
-                })
+            }else{
+                setShowEmailError(true)
             }
-        }).catch((e) => console.log(e))
+        }).catch((e) => {
+            if (e.response && e.response.status === 400) {
+                setShowEmailError(true)
+            }
+        })
 
     }
 
@@ -73,9 +65,9 @@ export default function SignUp() {
                     </Link>
 
                     <FormLabel>
-                        <Typography variant="h3">Create an account</Typography>
+                        <Typography variant="h3">Log in to your account</Typography>
                     </FormLabel>
-                    <TextField label={"Email"} required fullWidth type="email" name="email" onChange={(event) => { email.current = event.target.value }} error={showEmailError} helperText={showEmailError?"Email already in use":""}/>
+                    <TextField label={"Email"} required fullWidth type="email" name="email" onChange={(event) => { email.current = event.target.value }} error={showEmailError} helperText={showEmailError ? "Invalid email/password" : ""} />
                     <TextField label={"Password"}
                         required fullWidth
                         type={showPassword ? "text" : "password"}
@@ -94,24 +86,9 @@ export default function SignUp() {
                             ),
                         }}
                     />
-                    <FormLabel id="demo-radio-buttons-group-label">
-                        <Typography variant="h5">
-                            What would you use jobify for?
-                        </Typography>
-                    </FormLabel>
-                    <RadioGroup
-                        aria-labelledby="demo-radio-buttons-group-label"
-                        defaultValue="Job seeker"
-                        name="radio-buttons-group"
-                        row
-                        onChange={(event) => { role.current = event.target.value }}
-                    >
-                        <FormControlLabel value="Job seeker" control={<Radio />} label="Job seeker" />
-                        <FormControlLabel value="Job poster" control={<Radio />} label="Job poster" />
-                    </RadioGroup>
 
-                    <Typography>Already have an account? Log In</Typography>
-                    <Button variant="contained" type="submit">Sign Up</Button>
+                    <Typography>Don't have an account? Sign up</Typography>
+                    <Button variant="contained" type="submit">Log In</Button>
                 </FormControl>
 
             </form>

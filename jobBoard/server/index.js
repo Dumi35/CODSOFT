@@ -4,6 +4,8 @@ const app = express()
 const cors = require("cors")
 app.use(cors())
 
+const bcrypt = require("bcryptjs")
+
 const SERVER_PORT = 4000
 
 const mongoose = require("mongoose")
@@ -23,7 +25,7 @@ const user = require("./models/user");
 
 app.get("/signup", (req, res) => {
     const { email } = req.query
-    
+
     user.aggregate([
         {
             $match: {
@@ -42,7 +44,6 @@ app.get("/signup", (req, res) => {
         console.error(error)
     })
 
-
 })
 
 app.post("/signup", (req, res) => {
@@ -55,4 +56,24 @@ app.post("/signup", (req, res) => {
             res.send("Record saved"); // Respond to the client after saving
         })
         .catch(err => console.log(err));
+})
+
+app.get("/login", (req, res) => {
+    const { email} = req.query
+    
+    user.aggregate([
+        {
+            $match: {
+                email: email,
+            }
+        }
+    ]).then((response) => {
+        if(response.length==0){
+            res.status(400).send("Invalid email/password")
+        }else{
+            res.send(response)
+        }
+    }).catch((error) => {
+        console.error(error)
+    })
 })

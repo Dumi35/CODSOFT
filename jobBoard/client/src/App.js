@@ -7,12 +7,15 @@ import DrawerAppBar from "./components/AppBar";
 import Home from "./elements/Home";
 import Footer from "./components/Footer";
 import SignUp from "./elements/signUp"
+import LogIn from "./elements/logIn";
 
 //design variables
 export const blue200 = "#0F1640"
 const blue100 = "#0B69C1"
 export const grey200 = "#A09696"
 export const grey100 = "#E6F0F9"
+
+export const SERVER_HOST= "http://localhost:4000"
 
 const theme = createTheme({
   palette: {
@@ -109,6 +112,7 @@ function App() {
           <Route path="/" element={<Home/>} />
           <Route path="/home" element={<Home/>} />
           <Route path="/sign up" element={<SignUp/>} />
+          <Route path="/login" element={<LogIn/>} />
         </Routes>
 
       </Router>
