@@ -8,6 +8,8 @@ import Home from "./elements/Home";
 import Footer from "./components/Footer";
 import SignUp from "./elements/signUp"
 import LogIn from "./elements/logIn";
+import JobSeekerDash from "./elements/jobSeekerDash";
+
 
 //design variables
 export const blue200 = "#0F1640"
@@ -17,7 +19,7 @@ export const grey100 = "#E6F0F9"
 
 export const SERVER_HOST= "http://localhost:4000"
 
-const theme = createTheme({
+export const theme = createTheme({
   palette: {
     primary: {
       main: blue200, 
@@ -70,7 +72,7 @@ const theme = createTheme({
     MuiInputBase: {
       styleOverrides: {
         root: {
-          background: "white"
+          //background: "white"
         }
       }
     },
@@ -113,6 +115,7 @@ function App() {
           <Route path="/home" element={<Home/>} />
           <Route path="/sign up" element={<SignUp/>} />
           <Route path="/login" element={<LogIn/>} />
+          <Route path="/jobSeekerDash" element={<JobSeekerDash/>} />
         </Routes>
 
       </Router>

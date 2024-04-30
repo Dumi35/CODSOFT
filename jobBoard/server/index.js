@@ -10,6 +10,9 @@ const SERVER_PORT = 4000
 
 const mongoose = require("mongoose")
 
+//mongod --dbpath C:\Users\dumid\Desktop\CODSOFT\jobBoard\database --port 2721
+
+
 mongoose.connect("mongodb://127.0.0.1:2721/jobify").then(() => {
     console.log("connected")
     app.listen(SERVER_PORT, () => { console.log(`Server running on port ${SERVER_PORT}`) })
@@ -48,8 +51,8 @@ app.get("/signup", (req, res) => {
 
 app.post("/signup", (req, res) => {
     const { email, hashedPassword, salt, role } = req.body
+    //2G5K45LA2B
     const newUser = new user({ email: email, hashedPassword, salt, role });
-
     newUser.save()
         .then(() => {
             console.log("Record saved");

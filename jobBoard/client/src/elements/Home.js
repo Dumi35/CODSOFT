@@ -60,7 +60,7 @@ export default function Home() {
 
                         </Box>
                     </Box>
-                    <Box id="hero-image" sx={{ flexBasis: 550, overflow: "hidden" }}>
+                    <Box id="hero-image" sx={{ flexBasis: 580, overflow: "hidden" }}>
                         <Box sx={{
                             position: "absolute", top: -400, right: -250, zIndex: -1, display: {
                                 xs: "none", lg: "block"

@@ -4,8 +4,9 @@ import wave1 from "../assets/images/sign_up_wave.svg"
 import signup from "../assets/images/sign_up.png"
 import { blue200 } from "../App";
 import logo from "../assets/images/logo.png"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import axios from "axios";
+
 
 import { SERVER_HOST } from "../App";
 
@@ -26,10 +27,11 @@ export default function SignUp() {
         setShowPassword(!showPassword);
     };
 
+    const navigate = useNavigate()
 
     const handleSubmit = (event) => {
         event.preventDefault()
-        
+
         const salt = bcrypt.genSaltSync(10)
         const hashedPassword = bcrypt.hashSync(password.current, salt)
 
@@ -37,7 +39,7 @@ export default function SignUp() {
             params: { email: email.current }
         }).then((res) => {
             console.log(res.data)
-            if (res.data.length>0) {
+            if (res.data.length > 0) {
                 setShowEmailError(true)
             } else {
                 setShowEmailError(false)
@@ -47,6 +49,7 @@ export default function SignUp() {
                     salt: salt,
                     role: role.current
                 }).then(() => {
+                    navigate("/login")
                 }).catch((error) => {
                     console.error("error ", error)
                 })
@@ -58,7 +61,7 @@ export default function SignUp() {
     return (
         <Box display={"flex"} flexWrap={"wrap"} maxHeight={"100vh"} gap={4} sx={{ overflow: "hidden", position: "relative", background: blue200, zIndex: 0 }}>
             <form style={{
-                flexBasis: 450, flexGrow: 1, height: "100vh"
+                flexBasis: 450, flexGrow: 1, maxHeight: "100vh"
             }} onSubmit={handleSubmit}>
                 <FormControl sx={{
                     paddingBlock:
@@ -75,8 +78,8 @@ export default function SignUp() {
                     <FormLabel>
                         <Typography variant="h3">Create an account</Typography>
                     </FormLabel>
-                    <TextField label={"Email"} required fullWidth type="email" name="email" onChange={(event) => { email.current = event.target.value }} error={showEmailError} helperText={showEmailError?"Email already in use":""}/>
-                    <TextField label={"Password"}
+                    <TextField sx={ {zIndex:2}} label={"Email"} required fullWidth type="email" name="email" onChange={(event) => { email.current = event.target.value }} error={showEmailError} helperText={showEmailError ? "Email already in use" : ""} />
+                    <TextField label={"Password"} sx={ {zIndex:2}}
                         required fullWidth
                         type={showPassword ? "text" : "password"}
                         onChange={(event) => { password.current = event.target.value }}
