@@ -16,17 +16,19 @@ export const blue200 = "#0F1640"
 const blue100 = "#0B69C1"
 export const grey200 = "#A09696"
 export const grey100 = "#E6F0F9"
+export const darkGreen = "#295628"
+export const lightGreen = "#A2F1C6"
 
-export const SERVER_HOST= "http://localhost:4000"
+export const SERVER_HOST = "http://localhost:4000"
 
-export const theme = createTheme({
+const theme = createTheme({
   palette: {
     primary: {
-      main: blue200, 
+      main: blue200,
       contrastText: "white"
     },
     secondary: {
-      main: blue100, 
+      main: blue100,
       contrastText: "white"
     },
 
@@ -39,17 +41,17 @@ export const theme = createTheme({
     appBar: {
       color: 'blue',
     },
-    h3:{
+    h3: {
       color: blue200
     },
-  
-    h6:{
+
+    h6: {
       color: grey200
     },
-  
+
   },
 
-  
+
   components: {
     MuiAppBar: {
       styleOverrides: {
@@ -60,6 +62,13 @@ export const theme = createTheme({
         },
       },
     },
+    MuiAccordion: {
+      styleOverrides: {
+        root: {
+          fontFamily: "Outfit"
+        }
+      }
+    },
     MuiPaper: {
       styleOverrides: {
         root: {
@@ -69,11 +78,13 @@ export const theme = createTheme({
         },
       },
     },
-    MuiInputBase: {
+    MuiPaginationItem: {
       styleOverrides: {
         root: {
-          //background: "white"
+          color: blue200,
+          border:`1px solid ${blue200}`
         }
+
       }
     },
     MuiButton: {
@@ -81,7 +92,7 @@ export const theme = createTheme({
         root: {
           textTransform: "capitalize",
           borderRadius: "20px",
-          width:"150px"
+          width: "150px"
         },
         containedPrimary: {
           backgroundColor: blue200,
@@ -111,11 +122,11 @@ function App() {
     <ThemeProvider theme={theme} >
       <Router>
         <Routes>
-          <Route path="/" element={<Home/>} />
-          <Route path="/home" element={<Home/>} />
-          <Route path="/sign up" element={<SignUp/>} />
-          <Route path="/login" element={<LogIn/>} />
-          <Route path="/jobSeekerDash" element={<JobSeekerDash/>} />
+          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/sign up" element={<SignUp />} />
+          <Route path="/login" element={<LogIn />} />
+          <Route path="/jobSeekerDash" element={<JobSeekerDash />} />
         </Routes>
 
       </Router>
