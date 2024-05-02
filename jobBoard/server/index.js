@@ -61,7 +61,7 @@ app.get("/signup", (req, res) => {
 app.post("/signup", (req, res) => {
     const { email, hashedPassword, salt, role } = req.body
     //2G5K45LA2B
-    const newUser = new user({ name:"",email: email, phone_number:"",company:"", hashedPassword, salt, role });
+    const newUser = new user({ name: "", email: email, phone_number: "", company: "", hashedPassword, salt, role });
     newUser.save()
         .then(() => {
             console.log("Record saved");
@@ -198,19 +198,44 @@ Jobify
     // })
 })
 
+app.get("/load-profile", (req, res) => {
+    let { email } = req.query
+
+    user.aggregate([
+        {
+            $match:{
+                email:email
+            }
+        },
+        {
+            $project:{
+                name:1,
+                email:1,
+                company:1,
+                phone_number:1
+            }
+        }
+    ]).then((response) => {
+        res.send(response)
+    }).catch((e) => {
+        console.log(e)
+    })
+})
+
 //edit profile
-app.post("/edit-profile",(req,res)=>{
-    let {name,email,company,phone_number,user_email} = req.body
-    console.log(req.body)
+app.post("/edit-profile", (req, res) => {
+    let { name, email, company, phone_number, user_email } = req.body
     console.log(user_email)
-    user.updateOne({email:user_email},{$set:{
-        name: name,
-        email:email,
-        phone_number,
-        company:company
-    }}).then((response)=>{
+    user.updateOne({ email: user_email }, {
+        $set: {
+            name: name,
+            email: email,
+            phone_number:phone_number,
+            company: company
+        }
+    }).then((response) => {
         console.log("updated")
-    }).catch((e)=>{
+    }).catch((e) => {
         console.log(e)
     })
 })

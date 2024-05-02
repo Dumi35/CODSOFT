@@ -40,6 +40,7 @@ export default function AccountMenu() {
         <React.Fragment>
             <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center', gap: "5px" }}>
                 <Avatar sx={{ width: 40, height: 40, bgcolor: blue200 }}>{userName.slice(0, 1).toUpperCase()}</Avatar>
+                <Typography>{userName.split("@")[0]}</Typography>
                 <Tooltip title="Account settings">
                     <IconButton
                         onClick={handleClick}

@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { Box, FormControl, TextField, Typography, Button, Avatar, Stack, FormGroup, Badge } from "@mui/material"
 import DashboardAppBar from "../components/dashboardAppBar"
 import starfire from "../assets/images/starfire.jpg"
@@ -12,24 +12,52 @@ const SmallAvatar = styled(Avatar)(({ theme }) => ({
     width: 45,
     height: 45,
     border: `2px solid ${blue200}`,
-    position:"absolute",
-    right:"40px"
+    position: "absolute",
+    right: "40px"
 }));
 
-const user_email = sessionStorage.getItem("user_email")
-
-function editProfile(event){
-    event.preventDefault()
-    const formData = new FormData(event.currentTarget)
-    const formJson = Object.fromEntries(formData.entries())
-    axios.post(`${SERVER_HOST}/edit-profile`,{...formJson,user_email:user_email}).then((res)=>{
-        console.log(res)
-    }).catch((e)=>{
-        console.log(e)
-    })
-}
 
 export default function UserProfile() {
+
+    const userEmail= sessionStorage.getItem("user_email")
+    const userName = sessionStorage.getItem("user_name")
+    const phoneNumber= sessionStorage.getItem("phone_number")
+    const company=sessionStorage.getItem("company")
+    //const [formJson,setFormJson] = useState({})
+    var formData
+
+    const [disableEditBtn,setDisableEditBtn] = useState(true)
+
+    function enableEditBtn(){
+        setDisableEditBtn(false)
+    }
+
+    function editProfile(event) {
+        event.preventDefault()
+        //console.log(formData)
+        formData = new FormData(event.currentTarget)
+        const formJson = Object.fromEntries(formData.entries())
+        axios.post(`${SERVER_HOST}/edit-profile`, { ...formJson, user_email: userEmail }).then((res) => {
+           //console.log(res)
+           window.location.href = window.location.href;
+        }).catch((e) => {
+            console.log(e)
+        })
+    }
+
+    //load user profile
+    useEffect(() => {
+        axios.get(`${SERVER_HOST}/load-profile?email=${userEmail}`, { userEmail }).then((res) => {
+            //console.log(res)
+            sessionStorage.setItem("user_name",res.data[0].name)
+            sessionStorage.setItem("user_email",res.data[0].email)
+            sessionStorage.setItem("phone_number",res.data[0].phone_number)
+            sessionStorage.setItem("company",res.data[0].company)
+        }).catch((e) => {
+            console.log(e)
+        })
+    }, [])
+
     return (
         <Box sx={{
             paddingInline: {
@@ -49,35 +77,44 @@ export default function UserProfile() {
                     <FormGroup sx={{ width: "100%", gap: 2 }} >
                         <TextField
                             label="Full Name"
-                            name = "name"
+                            name="name"
+                            fullWidth
+                            defaultValue = {`${userName}`}
+                            onChange={enableEditBtn}
                         />
                         <TextField
                             label="Email"
                             type="email"
                             fullWidth
-                            name = "email"
+                            name="email"
+                            defaultValue = {`${userEmail}`}
+                            onChange={enableEditBtn}
                         />
                         <TextField
                             label="Company"
                             fullWidth
-                            name = "company"
+                            name="company"
+                            defaultValue = {`${company}`}
+                            onChange={enableEditBtn}
                         />
                         <TextField
                             label="Phone Number"
                             type="tel"
-                            name = "phone_number"
+                            name="phone_number"
                             fullWidth
+                            defaultValue = {`${phoneNumber}`}
+                            onChange={enableEditBtn}
                         />
 
-                        <Button variant="contained" type="submit">Save changes</Button>
+                        <Button variant="contained" type="submit" disabled={disableEditBtn}>Save changes</Button>
                     </FormGroup>
                 </Stack>
                 <Stack flexGrow={1} alignItems={"center"} justifyContent={"center"} flexBasis={"300px"}>
                     <Badge
                         overlap="circular"
-                        anchorOrigin={{ vertical: 'bottom', horizontal: 'right'}}
+                        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                         badgeContent={
-                            <SmallAvatar alt="Change profile pic" src={camera} sx={{bgcolor: blue200, cursor:"pointer"}} />
+                            <SmallAvatar alt="Change profile pic" src={camera} sx={{ bgcolor: blue200, cursor: "pointer" }} />
                         }
                     >
                         <Avatar sx={{ width: "80%", aspectRatio: 1, height: "auto", maxWidth: "400px", objectFit: "cover" }} alt="Profile picture" src={starfire}>H</Avatar>

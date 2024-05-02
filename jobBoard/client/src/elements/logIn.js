@@ -41,6 +41,8 @@ export default function LogIn() {
                 console.log("success")
                 sessionStorage.setItem("user_name",res.data[0].name)
                 sessionStorage.setItem("user_email",res.data[0].email)
+                sessionStorage.setItem("company",res.data[0].company)
+                sessionStorage.setItem("phone_number",res.data[0].phone_number)
                 navigate("/jobSeekerDash")
 
             } else {
