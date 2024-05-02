@@ -39,7 +39,8 @@ export default function LogIn() {
             if (hashedPassword === res.data[0].hashedPassword) {
                 setShowEmailError(false)
                 console.log("success")
-                sessionStorage.setItem("user",res.data[0].email)
+                sessionStorage.setItem("user_name",res.data[0].name)
+                sessionStorage.setItem("user_email",res.data[0].email)
                 navigate("/jobSeekerDash")
 
             } else {

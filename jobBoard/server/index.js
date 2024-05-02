@@ -21,7 +21,7 @@ const { Readable } = require("stream")
 
 
 mongoose.connect("mongodb://127.0.0.1:2721/jobify").then(() => {
-    console.log("connected")
+    console.log("connected to database")
     app.listen(SERVER_PORT, () => { console.log(`Server running on port ${SERVER_PORT}`) })
 }).catch((error) => {
     console.log("DB conn error ", error)
@@ -61,7 +61,7 @@ app.get("/signup", (req, res) => {
 app.post("/signup", (req, res) => {
     const { email, hashedPassword, salt, role } = req.body
     //2G5K45LA2B
-    const newUser = new user({ email: email, hashedPassword, salt, role });
+    const newUser = new user({ name:"",email: email, phone_number:"",company:"", hashedPassword, salt, role });
     newUser.save()
         .then(() => {
             console.log("Record saved");
@@ -100,21 +100,21 @@ app.get("/searchJobs", (req, res) => {
 
 
 const jobApplication = require("./models/job_applications")
-
+const nodemailer = require("nodemailer")
 connection.on("open", () => {
     let bucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db)
 
     const storage = multer.memoryStorage()
-    const upload = multer({storage})
+    const upload = multer({ storage })
 
     app.post("/apply", upload.single("resume"), async (req, res) => {
-       
-        let { full_name, email,linkedIn_profile, job_title, job_poster } = req.body
+
+        let { full_name, email, linkedIn_profile, job_title, company, job_poster } = req.body
 
         let { fieldname, originalname, mimetype, buffer } = req.file
 
         try {
-            
+
             let uploadStream = bucket.openUploadStream(fieldname)
             let readBuffer = new Readable()
             readBuffer.push(buffer)
@@ -125,12 +125,14 @@ connection.on("open", () => {
                 email: email,
                 linkedIn: linkedIn_profile,
                 job_title: job_title,
+                company: company,
                 job_poster: job_poster,
-                resume:{
-                    fileId:uploadStream.id,
+                resume: {
+                    fileId: uploadStream.id,
                     originalname,
-                    contentType:mimetype,
-                    length:buffer.length}
+                    contentType: mimetype,
+                    length: buffer.length
+                }
             })
 
             const isUploaded = await new Promise((resolve, reject) => {
@@ -138,20 +140,77 @@ connection.on("open", () => {
                     .on("finish", resolve("successfull"))
                     .on("error", reject("error occured while creating stream"))
             })
-            console.log("file upload: ",isUploaded)
-            
+            console.log("file upload: ", isUploaded)
+
             let savedFile = await job_application.save()
             if (!savedFile) {
-                console.log("pele saving file")
+                console.log("error saving file")
                 return res.status(404).send("error occured while saving our work")
             }
+
+            let transporter = nodemailer.createTransport({
+                service: 'gmail', // Use your email provider
+                auth: {
+                    user: 'dumebi328@gmail.com',
+                    pass: 'utpa ueby rmea bvmd'
+                }
+            });
+
+            let mailOptions = {
+                from: 'dumebi328@gmail.com',
+                to: email,
+                subject: `Succesful Application: ${job_title} Position`,
+                text: `Dear ${full_name}, \n
+We hope this email finds you well.\n
+We wish to inform you that your application for the role of ${job_title} at ${company} has been successfully submitted through our job board website.\n
+Your application is now in the hands of the hiring team at ${company}, and they will review it according to their recruitment process.\n
+Thank you for using our platform to apply for this opportunity. We wish you the best of luck with your application.
+\n
+Best Regards,\n
+Jobify
+                `
+            };
+
+            transporter.sendMail(mailOptions, function (error, info) {
+                if (error) {
+                    res.send(error)
+                } else {
+                    console.log('Email sent: ' + info.response);
+                }
+            });
 
             return res.send({ file: savedFile, message: "file uploaded successfully" })
         } catch (err) {
             res.send("error uploading file")
         }
     })
+
+    // app.get("/image/:fileId", (req, res)=>{
+    //     let {fileId} = req.params
+
+    //     let downloadStream = bucket.openDownloadStream( new mongoose.Types.ObjectId(fileId))
+
+    //     downloadStream.on("file", (file)=>{
+    //         res.set("Content-Type", file.contentType)
+    //     })
+
+    //     downloadStream.pipe(res)
+    // })
 })
 
-
-
+//edit profile
+app.post("/edit-profile",(req,res)=>{
+    let {name,email,company,phone_number,user_email} = req.body
+    console.log(req.body)
+    console.log(user_email)
+    user.updateOne({email:user_email},{$set:{
+        name: name,
+        email:email,
+        phone_number,
+        company:company
+    }}).then((response)=>{
+        console.log("updated")
+    }).catch((e)=>{
+        console.log(e)
+    })
+})

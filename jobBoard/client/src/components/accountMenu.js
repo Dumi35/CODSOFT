@@ -8,33 +8,43 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
-import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { Dashboard } from '@mui/icons-material';
 import { blue200 } from "../App";
+import { useNavigate } from 'react-router-dom';
 
 export default function AccountMenu() {
-    //const userEmail = sessionStorage.getItem("user")
-    const userEmail = "hi"
+    const userName = sessionStorage.getItem("user_name") == "" ? sessionStorage.getItem("user_email") : sessionStorage.getItem("user_name")
+    //const userName = "hi"
+    const navigate = useNavigate()
 
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
+
+    const openUserProfile = () => {
+        navigate("/user-profile")
+    }
+    const openDashboard = () => {
+        navigate("/jobSeekerDash")
+    }
+
     const handleClose = () => {
         setAnchorEl(null);
     };
     return (
         <React.Fragment>
-            <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center', gap:"5px" }}>
-                <Avatar sx={{ width: 40, height: 40, bgcolor: blue200 }}>{userEmail.slice(0, 1).toUpperCase()}</Avatar>
+            <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center', gap: "5px" }}>
+                <Avatar sx={{ width: 40, height: 40, bgcolor: blue200 }}>{userName.slice(0, 1).toUpperCase()}</Avatar>
                 <Tooltip title="Account settings">
                     <IconButton
                         onClick={handleClick}
                         size="small"
-                        sx={{ ml: 0, padding:0}}
+                        sx={{ ml: 0, padding: 0 }}
                         aria-controls={open ? 'account-menu' : undefined}
                         aria-haspopup="true"
                         aria-expanded={open ? 'true' : undefined}
@@ -78,10 +88,16 @@ export default function AccountMenu() {
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
-                <MenuItem onClick={handleClose}>
+                <MenuItem onClick={openUserProfile}>
                     <Avatar /> My Profile
                 </MenuItem>
                 <Divider />
+                <MenuItem onClick={openDashboard}>
+                    <ListItemIcon>
+                        <Dashboard fontSize="small" />
+                    </ListItemIcon>
+                    Dashboard
+                </MenuItem>
                 <MenuItem onClick={handleClose}>
                     <ListItemIcon>
                         <Settings fontSize="small" />

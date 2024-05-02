@@ -5,6 +5,7 @@ const jobApplicationsSchema = mongoose.Schema({
     email: String,
     linkedIn: String,
     job_title: String,
+    company:String,
     job_poster: String,
     resume: {
         fileId:String,

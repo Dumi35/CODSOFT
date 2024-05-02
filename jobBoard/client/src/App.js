@@ -9,6 +9,7 @@ import Footer from "./components/Footer";
 import SignUp from "./elements/signUp"
 import LogIn from "./elements/logIn";
 import JobSeekerDash from "./elements/jobSeekerDash";
+import UserProfile from "./elements/user_profile";
 
 
 //design variables
@@ -127,6 +128,7 @@ function App() {
           <Route path="/sign up" element={<SignUp />} />
           <Route path="/login" element={<LogIn />} />
           <Route path="/jobSeekerDash" element={<JobSeekerDash />} />
+          <Route path="/user-profile" element={<UserProfile />} />
         </Routes>
 
       </Router>
