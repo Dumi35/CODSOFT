@@ -8,7 +8,7 @@ import Home from "./elements/Home";
 import Footer from "./components/Footer";
 import SignUp from "./elements/signUp"
 import LogIn from "./elements/logIn";
-import JobSeekerDash from "./elements/jobSeekerDash";
+import UserDashboard from "./elements/dashboard";
 import UserProfile from "./elements/user_profile";
 
 
@@ -20,7 +20,7 @@ export const grey100 = "#E6F0F9"
 export const darkGreen = "#295628"
 export const lightGreen = "#A2F1C6"
 
-export const SERVER_HOST = "http://localhost:4000"
+export const SERVER_HOST = "http://192.168.22.106:4000"
 
 const theme = createTheme({
   palette: {
@@ -127,7 +127,7 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/sign up" element={<SignUp />} />
           <Route path="/login" element={<LogIn />} />
-          <Route path="/jobSeekerDash" element={<JobSeekerDash />} />
+          <Route path="/dashboard" element={<UserDashboard />} />
           <Route path="/user-profile" element={<UserProfile />} />
         </Routes>
 

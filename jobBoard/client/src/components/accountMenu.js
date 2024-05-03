@@ -14,6 +14,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { Dashboard } from '@mui/icons-material';
 import { blue200 } from "../App";
 import { useNavigate } from 'react-router-dom';
+import UserDashboard from '../elements/dashboard';
 
 export default function AccountMenu() {
     const userName = sessionStorage.getItem("user_name") == "" ? sessionStorage.getItem("user_email") : sessionStorage.getItem("user_name")
@@ -30,7 +31,16 @@ export default function AccountMenu() {
         navigate("/user-profile")
     }
     const openDashboard = () => {
-        navigate("/jobSeekerDash")
+        navigate("/dashboard")
+    }
+
+    const logout = () =>{
+        sessionStorage.removeItem("user_name")
+        sessionStorage.removeItem("user_email")
+        sessionStorage.removeItem("role")
+        sessionStorage.removeItem("company")
+        sessionStorage.removeItem("phone_number")
+        navigate("/login")
     }
 
     const handleClose = () => {
@@ -105,7 +115,7 @@ export default function AccountMenu() {
                     </ListItemIcon>
                     Settings
                 </MenuItem>
-                <MenuItem onClick={handleClose}>
+                <MenuItem onClick={logout}>
                     <ListItemIcon>
                         <Logout fontSize="small" />
                     </ListItemIcon>

@@ -52,7 +52,7 @@ function DrawerAppBar(props) {
     const container = window !== undefined ? () => window().document.body : undefined;
 
     return (
-        <Box sx={{ display: 'flex', zIndex: 2 }}>
+        <Box sx={{ display: 'flex' }}>
             <CssBaseline />
             <AppBar component="nav" >
                 <Toolbar >
@@ -68,12 +68,12 @@ function DrawerAppBar(props) {
                     <Typography
                         variant="h6"
                         component="div"
-                        sx={{ flexGrow: 1, display: { xs: 'flex', alignItems: 'center' } }}
+                        sx={{flexGrow: 1,display: { xs: 'flex', alignItems: 'center' } }}
                     >
                         <img src={require("../assets/images/logo.png")} alt="Logo" style={{ height: 'auto' }} />
                     </Typography>
-                    {/* <img src={require("../assets/images/logo.png")} alt="Logo" style={{ height: 'auto' }} sx={{ flexGrow: 1 }}/> */}
-                    <Box sx={{ display: { xs: 'none', sm: 'block', flexGrow: 1 } }}>
+                    
+                    <Box sx={{ display: { xs: 'none', sm: 'block'} }}>
 
                         {navItems.map((item, index) => (
 
@@ -83,12 +83,9 @@ function DrawerAppBar(props) {
 
                                     key={item}
                                     sx={{
-                                        //color: '#fff',
-                                        fontWeight: "bold",
-                                        ...(index === 5 && { border: '1px solid black', paddingInline: 2.5 }),
+                                        width:"100px",
                                     }}
                                 >
-
                                     {item}
                                 </Button>
                             </Link>

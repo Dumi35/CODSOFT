@@ -20,7 +20,7 @@ const { Readable } = require("stream")
 //mongod --dbpath C:\Users\dumid\Desktop\CODSOFT\jobBoard\database --port 2721
 
 
-mongoose.connect("mongodb://127.0.0.1:2721/jobify").then(() => {
+mongoose.connect("mongodb+srv://dumiduru35:wb9X7oAaQjgZZRNR@cluster0.g8invcf.mongodb.net/jobify").then(() => {
     console.log("connected to database")
     app.listen(SERVER_PORT, () => { console.log(`Server running on port ${SERVER_PORT}`) })
 }).catch((error) => {
@@ -92,12 +92,49 @@ app.get("/login", (req, res) => {
 
 const postedJob = require("./models/posted_jobs")
 
-app.get("/searchJobs", (req, res) => {
+app.post("/postJobs", (req, res) => {
+    let { job_title, job_poster, company, location, salary_range, bonus_if, about, minimum_requirements, job_type } = req.body
+    console.log(req.body)
+    const newJob = new postedJob({ job_title, job_poster, company, location, salary_range, bonus_if, about, minimum_requirements, job_type })
+
+    newJob.save().then((response) => {
+
+    }).catch((e) => { console.log(e) })
+})
+
+app.get("/searchAllJobs", (req, res) => {
     postedJob.find({}).then((response) => {
         res.send(response)
     }).catch((e) => { console.log(e) })
 })
 
+app.get("/searchJobCriteria", (req, res) => {
+    let { job_title,location } = req.query  
+
+    job_title = job_title ===""? " ":job_title
+    location = location ===""? " ":location
+
+    postedJob.aggregate([
+        {
+            $search: {
+                index: "loadPostedJobs",
+                "text": {
+                    "path": ["job_title","location"],
+                    "query": [job_title,location],
+                    fuzzy: {
+                        maxEdits:2
+                  }
+                }
+            }
+        },
+
+    ]).then((response) => {
+        res.send(response)
+    }).catch((e) => {
+        console.log(e)
+    })
+
+})
 
 const jobApplication = require("./models/job_applications")
 const nodemailer = require("nodemailer")
@@ -129,7 +166,7 @@ connection.on("open", () => {
                 job_poster: job_poster,
                 resume: {
                     fileId: uploadStream.id,
-                    originalname,
+                    filename: originalname,
                     contentType: mimetype,
                     length: buffer.length
                 }
@@ -203,16 +240,16 @@ app.get("/load-profile", (req, res) => {
 
     user.aggregate([
         {
-            $match:{
-                email:email
+            $match: {
+                email: email
             }
         },
         {
-            $project:{
-                name:1,
-                email:1,
-                company:1,
-                phone_number:1
+            $project: {
+                name: 1,
+                email: 1,
+                company: 1,
+                phone_number: 1
             }
         }
     ]).then((response) => {
@@ -225,12 +262,12 @@ app.get("/load-profile", (req, res) => {
 //edit profile
 app.post("/edit-profile", (req, res) => {
     let { name, email, company, phone_number, user_email } = req.body
-    console.log(user_email)
+    
     user.updateOne({ email: user_email }, {
         $set: {
             name: name,
             email: email,
-            phone_number:phone_number,
+            phone_number: phone_number,
             company: company
         }
     }).then((response) => {
