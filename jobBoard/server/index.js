@@ -6,7 +6,7 @@ app.use(cors())
 
 const bcrypt = require("bcryptjs")
 
-const SERVER_PORT = 4000
+const SERVER_PORT = process.env.PORT || 4000
 
 const mongoose = require("mongoose")
 
@@ -51,7 +51,7 @@ app.get("/signup", (req, res) => {
             }
         }
     ]).then((response) => {
-        res.send(response)
+        return res.send(response)
     }).catch((error) => {
         console.error(error)
     })
@@ -65,7 +65,7 @@ app.post("/signup", (req, res) => {
     newUser.save()
         .then(() => {
             console.log("Record saved");
-            res.send("Record saved"); // Respond to the client after saving
+            return res.send("Record saved"); // Respond to the client after saving
         })
         .catch(err => console.log(err));
 })
@@ -81,9 +81,9 @@ app.get("/login", (req, res) => {
         }
     ]).then((response) => {
         if (response.length == 0) {
-            res.status(400).send("Invalid email/password")
+            return res.status(400).send("Invalid email/password")
         } else {
-            res.send(response)
+            return res.send(response)
         }
     }).catch((error) => {
         console.error(error)
@@ -104,7 +104,7 @@ app.post("/postJobs", (req, res) => {
 
 app.get("/searchAllJobs", (req, res) => {
     postedJob.find({}).then((response) => {
-        res.send(response)
+        return res.send(response)
     }).catch((e) => { console.log(e) })
 })
 
@@ -129,7 +129,7 @@ app.get("/searchJobCriteria", (req, res) => {
         },
 
     ]).then((response) => {
-        res.send(response)
+        return res.send(response)
     }).catch((e) => {
         console.log(e)
     })
@@ -210,7 +210,7 @@ Jobify
 
             transporter.sendMail(mailOptions, function (error, info) {
                 if (error) {
-                    res.send(error)
+                    return res.send(error)
                 } else {
                     console.log('Email sent: ' + info.response);
                 }
@@ -218,7 +218,7 @@ Jobify
 
             return res.send({ file: savedFile, message: "file uploaded successfully" })
         } catch (err) {
-            res.send("error uploading file")
+            return res.send("error uploading file")
         }
     })
 
@@ -228,7 +228,7 @@ Jobify
     //     let downloadStream = bucket.openDownloadStream( new mongoose.Types.ObjectId(fileId))
 
     //     downloadStream.on("file", (file)=>{
-    //         res.set("Content-Type", file.contentType)
+    //         return res.set("Content-Type", file.contentType)
     //     })
 
     //     downloadStream.pipe(res)
@@ -253,7 +253,7 @@ app.get("/load-profile", (req, res) => {
             }
         }
     ]).then((response) => {
-        res.send(response)
+        return res.send(response)
     }).catch((e) => {
         console.log(e)
     })
