@@ -189,7 +189,7 @@ connection.on("open", () => {
                 service: 'gmail', // Use your email provider
                 auth: {
                     user: 'dumebi328@gmail.com',
-                    pass: 'utpa ueby rmea bvmd'
+                    pass: 'ngev leuw ogyh aiyq'
                 }
             });
 
@@ -210,13 +210,14 @@ Jobify
 
             transporter.sendMail(mailOptions, function (error, info) {
                 if (error) {
-                    return res.send(error)
+                    console.log('Email Failed: ' + error);
+                    //return res.send(error)
                 } else {
                     console.log('Email sent: ' + info.response);
                 }
             });
 
-            return res.send({ file: savedFile, message: "file uploaded successfully" })
+            return res.send({message: "file uploaded successfully" })
         } catch (err) {
             return res.send("error uploading file")
         }

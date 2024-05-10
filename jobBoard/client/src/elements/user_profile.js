@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Box, FormControl, TextField, Typography, Button, Avatar, Stack, FormGroup, Badge } from "@mui/material"
+import { Box, TextField, Typography, Button, Avatar, Stack, FormGroup, Badge } from "@mui/material"
 import DashboardAppBar from "../components/dashboardAppBar"
 import starfire from "../assets/images/starfire.jpg"
 import camera from "../assets/icons/camera.svg"
@@ -39,7 +39,7 @@ export default function UserProfile() {
         const formJson = Object.fromEntries(formData.entries())
         axios.post(`${SERVER_HOST}/edit-profile`, { ...formJson, user_email: userEmail }).then((res) => {
            //console.log(res)
-           window.location.href = window.location.href;
+           //window.location.href = window.location.href;
         }).catch((e) => {
             console.log(e)
         })

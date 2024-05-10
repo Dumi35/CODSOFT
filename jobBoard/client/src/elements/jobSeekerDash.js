@@ -45,12 +45,6 @@ export default function JobSeekerDash() {
         setHeight(header.offsetHeight + 60)
     }, [header, showApplicationAlert])
 
-    function searchJobs() {
-        axios.get(`${SERVER_HOST}/searchJobs`).then((res) => {
-            setAllJobs(res.data)
-        }).catch((e) => { console.log(e) })
-    }
-
     function searchJobCriteria(event) {
         event.preventDefault()
         const formData = new FormData(event.currentTarget)
@@ -181,14 +175,14 @@ export default function JobSeekerDash() {
                     <form onSubmit={searchJobCriteria}>
                         <Box display={"flex"} flexWrap={"wrap"} alignItems={"center"} justifyContent={"space-between"} boxShadow={"0px 10px 2px #F5F5F5"} borderRadius={8} paddingInline={1.2} paddingBottom={1} gap={1}>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: "3px", flexGrow: 1 }}>
-                                <img src={searchIcon} width={"30px"} />
+                                <img src={searchIcon} width={"30px"} alt="search icon" />
                                 <TextField id="input-with-sx" label="Job title or keyword" variant="standard" InputProps={{
                                     disableUnderline: true
                                 }} sx={{ position: "relative", top: "-7px" }} fullWidth name="job_title" />
                             </Box>
 
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: "3px", flexGrow: 1 }}>
-                                <img src={locationIcon} width={"30px"} />
+                                <img src={locationIcon} width={"30px"} alt="location icon" />
 
                                 <Autocomplete
                                     id="combo-box-demo"
@@ -210,7 +204,7 @@ export default function JobSeekerDash() {
 
                             </Box>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: "3px", flexGrow: 1 }}>
-                                <img src={categoryIcon} width={"30px"} />
+                                <img src={categoryIcon} width={"30px"} alt="category icon"/>
 
                                 <Autocomplete
                                     id="combo-box-demo"

@@ -1,11 +1,8 @@
-import "@fontsource/montserrat"
 import "@fontsource/outfit"
 import './App.css';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material';
-import DrawerAppBar from "./components/AppBar";
 import Home from "./elements/Home";
-import Footer from "./components/Footer";
 import SignUp from "./elements/signUp"
 import LogIn from "./elements/logIn";
 import UserDashboard from "./elements/dashboard";

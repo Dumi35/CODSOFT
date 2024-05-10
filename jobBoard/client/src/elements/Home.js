@@ -8,9 +8,6 @@ import chat from "../assets/icons/fluent_chat-12-filled.svg"
 import employee from "../assets/images/Employee of the month-pana.png"
 
 import DrawerAppBar from "../components/AppBar";
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-
-import SignUp from "./signUp";
 
 import { grey100 } from "../App";
 import { grey200 } from "../App";
@@ -66,9 +63,9 @@ export default function Home() {
                                 xs: "none", lg: "block"
                             }
                         }}>
-                            <img src={heroBg} />
+                            <img src={heroBg} alt="" />
                         </Box>
-                        <img src={heroImg} width={"100%"} />
+                        <img src={heroImg} width={"100%"} alt=""/>
                     </Box>
                 </Box>
 
@@ -193,7 +190,7 @@ export default function Home() {
                         </Box>
 
                         <Box sx={{ flexBasis: 600, alignSelf: "center" }}>
-                            <img src={employee} width={"100%"} />
+                            <img src={employee} width={"100%"} alt="employee of the month" />
                         </Box>
 
                     </Box>

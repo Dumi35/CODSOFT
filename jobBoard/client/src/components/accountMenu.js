@@ -14,7 +14,6 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { Dashboard } from '@mui/icons-material';
 import { blue200 } from "../App";
 import { useNavigate } from 'react-router-dom';
-import UserDashboard from '../elements/dashboard';
 
 export default function AccountMenu() {
     const userName = sessionStorage.getItem("user_name") == "" ? sessionStorage.getItem("user_email") : sessionStorage.getItem("user_name")

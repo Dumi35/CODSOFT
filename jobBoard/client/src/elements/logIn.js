@@ -1,5 +1,5 @@
 import React from "react";
-import { FormControl, TextField, Button, FormLabel, Typography, Box, RadioGroup, FormControlLabel, Radio, IconButton, InputAdornment } from "@mui/material";
+import { FormControl, TextField, Button, FormLabel, Typography, Box, IconButton, InputAdornment } from "@mui/material";
 import wave1 from "../assets/images/sign_up_wave.svg"
 import signup from "../assets/images/sign_up.png"
 import { blue200 } from "../App";

@@ -72,7 +72,7 @@ export default function SignUp() {
                     }, display: "flex", gap: "20px", flexDirection: "column", justifyContent: "center", height: "100%", background: "white"
                 }}>
                     <Link to="/home">
-                        <img src={logo} width={"100px"} />
+                        <img src={logo} width={"100px"} alt="logo" />
                     </Link>
 
                     <FormLabel>

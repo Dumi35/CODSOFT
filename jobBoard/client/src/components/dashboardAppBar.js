@@ -6,7 +6,7 @@ import AccountMenu from "../components/accountMenu";
 export default function DashboardAppBar() {
     return (
         <Stack direction={"row"} justifyContent={"space-between"} marginTop={4}>
-            <img src={logo} width={"100px"} />
+            <img src={logo} width={"100px"} alt="logo" />
             <AccountMenu />
         </Stack>
     )
