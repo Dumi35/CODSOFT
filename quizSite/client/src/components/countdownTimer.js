@@ -54,9 +54,9 @@ export default function CountDownTimer(props) {
 
     return (
         <>
-            <Box sx={{ width: '500px' }}>
+            <Box sx={{ width: '100%' }}>
                 <LinearProgress variant="determinate" value={countdownPercentage} />
-                <Typography>{countdownText} hm</Typography>
+                <Typography>{countdownText}</Typography>
             </Box>
 
         </>

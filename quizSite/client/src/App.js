@@ -37,9 +37,9 @@ const theme = createTheme({
       color: purple200
     },
 
-    h6: {
-      color: grey200
-    },
+    // h6: {
+    //   color: grey200
+    // },
 
   },
 
@@ -80,6 +80,9 @@ const theme = createTheme({
         root: {
           '&.MuiPaper-root.MuiCard-root': {
             justifyContent: "start"
+          },
+          '&.MuiPaper-root.MuiDialog-paper': {
+            borderRadius:"10px"
           },
         },
       },

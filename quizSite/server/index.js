@@ -79,6 +79,5 @@ app.get("/login", (req, res) => {
 
 app.get("/questions",(req,res)=>{
     let {name} = req.query
-    console.log("name",name)
     quiz.find({name:name}).then((response)=>{res.send(response);console.log(response)}).catch((e)=>{console.log(e)})
 })

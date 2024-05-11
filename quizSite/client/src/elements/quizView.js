@@ -1,30 +1,34 @@
-import React, { useEffect, useState } from "react"
-import { Typography, Box, FormGroup, FormControl, RadioGroup, FormControlLabel, Radio, Stack, Button } from "@mui/material"
+import React, { useEffect, useState, useRef } from "react"
+import { Typography, Box, FormGroup, FormControl, RadioGroup, FormControlLabel, Radio, Stack, Button, DialogContent, Dialog, DialogActions, Avatar } from "@mui/material"
 import { useLocation } from 'react-router-dom';
 import CountDownTimer from "../components/countdownTimer";
 import axios from "axios"
 import { SERVER_HOST } from "../App";
 import { purple200 } from "../App";
 import { grey200 } from "../App";
-
+import complete from "../assets/images/complete.gif"
 
 export default function QuizView(props) {
-    const stylesheet={
-        option:{
-            border:"2px solid grey",
-            borderRadius:"10px",
-            flexBasis: "200px", 
+    const stylesheet = {
+        option: {
+            border: "2px solid grey",
+            borderRadius: "10px",
+            flexBasis: "200px",
             flexGrow: 1,
-            marginInline:"0px"
+            marginInline: "0px"
         },
-        selected:{
-            border:`2px solid ${purple200}`
+        selected: {
+            border: `2px solid ${purple200}`
         }
     }
 
     const [quizDetails, setQuizDetails] = useState([{}])
     const [questionNumber, setQuestionNumber] = useState(0)
-    const [questions, setQuestions] = useState([{question:"",options:{},correctAnswer:""}])
+    const [questions, setQuestions] = useState([{ question: "", options: {}, correctAnswer: "" }])
+    const [userAnswers, setUserAnswers] = useState([])
+    const [currentAnswer, setCurrentAnswer] = useState("")
+    const [showScore, setShowScore] = useState(false)
+    const [score, setScore] = useState(0)
 
     const location = useLocation()
 
@@ -42,38 +46,68 @@ export default function QuizView(props) {
         if (selectedOption) {
             selectedOption.style = stylesheet.selected;
         }
-        // event.target.value = null
+        setCurrentAnswer(value)
+        userAnswers[questionNumber] = value
+        console.log(userAnswers)
     }
 
     //load all the questions
     useEffect(() => {
         axios.get(`${SERVER_HOST}/questions?quiz=${location.state.name}`, { params: { name: location.state.name } }).then((res) => {
             console.log(res)
-            
             const { name, questions } = res.data[0];
             setQuizDetails({ name });
             setQuestions(questions);
-      
+
         }).catch((e) => { console.log(e) })
     }, [])
 
     function displayNextQuestion(event) {
-        var x =  ()=>{setQuestionNumber(questionNumber + 1);event.target.disabled=false}
-        if (questionNumber+1 !== questions.length) x() 
+        var x = () => { setQuestionNumber(questionNumber + 1); setCurrentAnswer("") }
+        if (questionNumber + 1 !== questions.length) {
+            x()
+        }
     }
 
     function displayPreviousQuestion(event) {
-        var x = ()=>{setQuestionNumber(questionNumber - 1);event.target.disabled=false}
-        if (questionNumber-1 !== -1 ) x() 
+        var x = () => { setQuestionNumber(questionNumber - 1); setCurrentAnswer(userAnswers[questionNumber]) }
+        if (questionNumber - 1 !== -1) x()
+    }
+
+    function submitAnswers(event) {
+        let newScore = 0
+        userAnswers.map((item, index) => {
+            console.log(item)
+            console.log(questions[index].correctAnswer.toUpperCase())
+            if (item === questions[index].correctAnswer.toUpperCase()) {
+                newScore += 1;
+            }
+            setScore(newScore)
+        })
+        setShowScore(true)
+    }
+
+    function DisplayScore() {
+        return (
+            <Dialog open={showScore} PaperProps={{ sx: { padding:"10px 20px"} }}>
+                <DialogContent >
+                    <Stack gap={1} justifyContent={"center"} alignItems={"center"}>
+                        <Avatar src={complete} sx={{ width: "90px", aspectRaio: 1, height: "auto", bgcolor:purple200 }}></Avatar>
+                        <Typography>Score: {score}/{questions.length}</Typography>
+                    </Stack>
+                </DialogContent>
+                <DialogActions>
+                    <Button variant="contained" onClick={() => setShowScore(false)}>Ok</Button>
+                </DialogActions>
+            </Dialog>
+        )
     }
 
     return (
         <Box display={"flex"} justifyContent={{ md: "center" }} alignItems={{ md: "center" }} minHeight={"99vh"}>
-            {/* <CountDownTimer duration={90} colors={["#ff9248", "#a20000"]}
-                colorValues={[20, 10]}
-            onComplete={handleOnComplete} /> */}
+
             <FormControl sx={{
-                border: `2px solid ${purple200}`, width: "min(100%, 900px)", boxSizing: "border-box",
+                width: "min(100%, 900px)", boxSizing: "border-box",
                 paddingBlock:
                     { xs: 3, md: 10 },
                 paddingInline: {
@@ -81,30 +115,38 @@ export default function QuizView(props) {
                     md: 10
                 }, display: "flex", flexDirection: "column", gap: "20px", borderRadius: 5, boxShadow: { xs: "none", md: "0px 0px 10px grey" }
             }}>
+                {/* <CountDownTimer duration={90} colors={["#ff9248", "#a20000"]}
+                    colorValues={[20, 10]}
+                    onComplete={handleOnComplete} /> */}
                 <Typography textAlign={"center"} variant="h5">
-                    {/* {quizDetails[0].questions[questionNumber]} */}
-                    <span style={{color:`${grey200}`}}>Question {questionNumber+1}/{questions.length}</span> {questions[questionNumber].question }
+                    {quizDetails.name}
                 </Typography>
 
-                <RadioGroup onChange={changeSelectedRadio} sx={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                <Typography textAlign={"center"} variant="h6">
+                    <span style={{ color: `${grey200}` }}>Question {questionNumber + 1}/{questions.length}</span> {questions[questionNumber].question}
+                </Typography>
+
+                <RadioGroup onChange={changeSelectedRadio} sx={{ display: "flex", flexDirection: "column", gap: "10px" }} value={currentAnswer}>
                     {/* //  * use A,B,C,D for values and option text like paris as label */}
                     {/* //  *TODO selected border should be purpled, unselected grey */}
 
                     <Box display={"flex"} flexWrap={"wrap"} alignItems={"center"} gap={1} >
-                        <FormControlLabel control={<Radio />} id="option-A" label={`${questions[questionNumber].options.a}`} value="A" className="option" sx={stylesheet.option} />
-                        <FormControlLabel control={<Radio />} id="option-B" label={`${questions[questionNumber].options.b}`} value="B" className="option" sx={stylesheet.option} />
+                        <FormControlLabel control={<Radio />} id="option-A" label={`A. ${questions[questionNumber].options.a}`} value="A" className="option" sx={stylesheet.option} />
+                        <FormControlLabel control={<Radio />} id="option-B" label={`B. ${questions[questionNumber].options.b}`} value="B" className="option" sx={stylesheet.option} />
                     </Box>
 
                     <Box display={"flex"} flexWrap={"wrap"} alignItems={"center"} gap={1} >
-                        <FormControlLabel control={<Radio />} id="option-C" label={`${questions[questionNumber].options.c}`} value="C" className="option" sx={stylesheet.option} />
-                        <FormControlLabel control={<Radio />} id="option-D" label={`${questions[questionNumber].options.d}`} value="D" className="option" sx={stylesheet.option} />
+                        <FormControlLabel control={<Radio />} id="option-C" label={`C. ${questions[questionNumber].options.c}`} value="C" className="option" sx={stylesheet.option} />
+                        <FormControlLabel control={<Radio />} id="option-D" label={`D. ${questions[questionNumber].options.d}`} value="D" className="option" sx={stylesheet.option} />
                     </Box>
                 </RadioGroup>
                 <Stack direction={"row"} justifyContent={"space-between"}>
                     <Button variant="contained" onClick={displayPreviousQuestion}>Previous</Button>
+                    <Button variant="contained" onClick={submitAnswers}>Submit</Button>
                     <Button variant="contained" onClick={displayNextQuestion}>Next</Button>
                 </Stack>
             </FormControl>
+            {showScore && <DisplayScore />}
         </Box>
     )
 }
