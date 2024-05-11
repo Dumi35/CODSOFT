@@ -54,7 +54,7 @@ export default function QuizView(props) {
 
     //load all the questions
     useEffect(() => {
-        axios.get(`${SERVER_HOST}/questions?quiz=${location.state.name}`, { params: { name: location.state.name } }).then((res) => {
+        axios.get(`${SERVER_HOST}/questions?quiz=${location.state.name}`, { params: { id: location.state.id } }).then((res) => {
             const { name, questions } = res.data[0];
             setQuizDetails({ name });
             setQuestions(questions);

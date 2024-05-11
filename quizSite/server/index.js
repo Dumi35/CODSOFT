@@ -77,7 +77,26 @@ app.get("/login", (req, res) => {
     })
 })
 
+app.get("/suggested-quizzes",(req,res)=>{
+    let {userEmail} = req.query
+    quiz.find({name:{$ne:userEmail}}).then((response)=>{
+        res.send(response)
+    }).catch((e)=>{
+        console.log(e)
+    })
+})
+
+app.get("/personal-quizzes",(req,res)=>{
+    let {userEmail} = req.query
+    quiz.find({name:userEmail}).then((response)=>{
+        res.send(response)
+    }).catch((e)=>{
+        console.log(e)
+    })
+})
+
+//load quiz questions in quiz view
 app.get("/questions",(req,res)=>{
-    let {name} = req.query
-    quiz.find({name:name}).then((response)=>{res.send(response);console.log(response)}).catch((e)=>{console.log(e)})
+    let {id} = req.query
+    quiz.find({_id:id}).then((response)=>{res.send(response)}).catch((e)=>{console.log(e)})
 })

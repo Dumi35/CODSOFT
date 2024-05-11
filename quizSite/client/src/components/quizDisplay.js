@@ -4,7 +4,6 @@ import mountain from "../assets/images/m3.jpg"
 import TimerIcon from '@mui/icons-material/Timer';
 import ListIcon from '@mui/icons-material/List';
 import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
-import QuizView from "../elements/quizView";
 import { useNavigate } from "react-router-dom"
 
 export default function QuizDisplay(props) {
@@ -12,6 +11,7 @@ export default function QuizDisplay(props) {
 
     const [page, setPage] = useState(1)
     const [openQuizDetailsIndex, setOpenQuizDetailsIndex] = useState(null);
+    const [openedQuiz, setOpenedQuiz] = useState(0);
 
     let quizzes = props.quizzes
     let itemsPerPage = 5
@@ -30,8 +30,9 @@ export default function QuizDisplay(props) {
     };
 
     // Function to handle opening dialog for a specific item
-    const handleOpenQuizDetails = (index) => {
+    const handleOpenQuizDetails = (index,length) => {
         setOpenQuizDetailsIndex(index);
+        setOpenedQuiz(length)
     };
 
     // Function to handle closing dialog
@@ -39,10 +40,10 @@ export default function QuizDisplay(props) {
         setOpenQuizDetailsIndex(null);
     };
 
-    const startQuiz = () => {
+    const startQuiz = (quizId) => {
         navigate(
              '/dashboard/quiz',
-              {state: {name:"Biology"}} // your data array of objects
+              {state: {id:quizId}} // your data array of objects
         )
     }
 
@@ -53,7 +54,7 @@ export default function QuizDisplay(props) {
                     currentPageData.map((item, index) => {
                         return (
                             <div key={index}>
-                                <Card sx={{ display: 'flex', alignItems: "center", justifyContent: "center", background: "none", cursor: "pointer", borderRadius: "10px" }} onClick={() => handleOpenQuizDetails(index)}>
+                                <Card sx={{ display: 'flex', alignItems: "center", justifyContent: "center", background: "none", cursor: "pointer", borderRadius: "10px" }} onClick={() => handleOpenQuizDetails(index,item.questions.length)}>
                                     <CardMedia
                                         component="img"
                                         sx={{ width: 100, aspectRatio: 1, borderRadius: "10px 0px 0px 10px" }}
@@ -65,7 +66,7 @@ export default function QuizDisplay(props) {
                                                 {item.name}
                                             </Typography>
                                             <Typography variant="subtitle2" color="text.secondary" component="div">
-                                                {item.by}
+                                                {item.createdBy}
                                             </Typography>
                                         </CardContent>
                                     </Box>
@@ -82,13 +83,13 @@ export default function QuizDisplay(props) {
                                                 <Avatar>
                                                     <TimerIcon />
                                                 </Avatar>
-                                                <Typography>{item.name}</Typography>
+                                                <Typography>{item.quizDuration}</Typography>
                                             </Stack>
                                             <Stack direction="row" alignItems={"center"} gap={1}>
                                                 <Avatar>
                                                     <ListIcon />
                                                 </Avatar>
-                                                <Typography>{item.name}</Typography>
+                                                <Typography>{openedQuiz} multiple choice questions</Typography>
                                             </Stack>
                                             <Stack direction="row" alignItems={"center"} gap={1}>
                                                 <Avatar>
@@ -103,7 +104,7 @@ export default function QuizDisplay(props) {
                                     </DialogContent>
                                     <DialogActions sx={{ justifyContent: "center" }}>
                                         <Button onClick={handleCloseQuizDetails}>Cancel</Button>
-                                        <Button onClick={startQuiz}>Start Quiz</Button>
+                                        <Button onClick={()=>startQuiz(item._id)}>Start Quiz</Button>
                                     </DialogActions>
                                 </Dialog>
 

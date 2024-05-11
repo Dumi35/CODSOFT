@@ -1,8 +1,10 @@
-import React, {useState} from "react"
+import React, {useState, useEffect} from "react"
 import { Box, Button, Typography, Stack, Avatar, Tabs, Tab } from "@mui/material"
 import QuizDisplay from "../components/quizDisplay"
 import { purple200 } from "../App"
 import starfire from "../assets/images/starfire.jpg"
+import axios from "axios"
+import { SERVER_HOST } from "../App"
 
 function TabPanel({ children, value, index, content }) {
    return (
@@ -18,13 +20,27 @@ function TabPanel({ children, value, index, content }) {
 }
 
 export default function Dashboard() {
+   const userEmail = sessionStorage.getItem("user_email") 
    const [tabValue, setTabValue] = useState(0);
+   const [suggestedQuizzes, setSuggestedQuizzes] = useState([{}]);
+   const [personalQuizzes, setPersonalQuizzes] = useState([{}]);
 
    const handleTabChange = (event, newValue) => {
       setTabValue(newValue);
    };
 
-   const suggestedQuizzes = [{name:"Biology", by:"Dumebi"}, {name:"Chemistry", by:"Dumebi"}, {name:"Physics", by:"Dumebi"}, {name:"Physics", by:"Dumebi"}]
+   useEffect(()=>{
+      axios.get(`${SERVER_HOST}/suggested-quizzes?email=${userEmail}`,{params: {userEmail}}).then((res)=>{
+         setSuggestedQuizzes(res.data)
+      }).catch((e)=>{
+         console.log(e)
+      })
+      axios.get(`${SERVER_HOST}/personal-quizzes?email=${userEmail}`,{params: {userEmail}}).then((res)=>{
+         setPersonalQuizzes(res.data)
+      }).catch((e)=>{
+         console.log(e)
+      })
+   },[])
 
    return (
       <Box sx={{
@@ -63,7 +79,7 @@ export default function Dashboard() {
 
          <TabPanel value={tabValue} index={0} content={suggestedQuizzes}>
          </TabPanel>
-         <TabPanel value={tabValue} index={1} content={suggestedQuizzes}>
+         <TabPanel value={tabValue} index={1} content={personalQuizzes}>
          </TabPanel>
          <TabPanel value={tabValue} index={2} content={suggestedQuizzes}>
          </TabPanel>

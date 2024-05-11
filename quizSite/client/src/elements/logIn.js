@@ -34,7 +34,6 @@ export default function LogIn() {
             const hashedPassword = bcrypt.hashSync(password.current, salt)
             if (hashedPassword === res.data[0].hashedPassword) {
                 setShowEmailError(false)
-                sessionStorage.setItem("user_name",res.data[0].name)
                 sessionStorage.setItem("user_email",res.data[0].email)
                 navigate("/dashboard")
 
