@@ -6,6 +6,7 @@ import SignUp from "./elements/signUp"
 import LogIn from "./elements/logIn";
 import Dashboard from "./elements/dashboard";
 import QuizView from "./elements/quizView";
+import QuizReview from "./elements/quizReview";
 
 
 //design variables
@@ -136,6 +137,7 @@ function App() {
           <Route path="/login" element={<LogIn />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dashboard/quiz" element={<QuizView />} />
+          <Route path="/dashboard/quiz-review" element={<QuizReview />} />
 
         </Routes>
 

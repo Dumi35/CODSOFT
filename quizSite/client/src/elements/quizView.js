@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useRef } from "react"
 import { Typography, Box, FormGroup, FormControl, RadioGroup, FormControlLabel, Radio, Stack, Button, DialogContent, Dialog, DialogActions, Avatar } from "@mui/material"
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import CountDownTimer from "../components/countdownTimer";
 import axios from "axios"
 import { SERVER_HOST } from "../App";
 import { purple200 } from "../App";
 import { grey200 } from "../App";
 import complete from "../assets/images/complete.gif"
+
 
 export default function QuizView(props) {
     const stylesheet = {
@@ -26,11 +27,12 @@ export default function QuizView(props) {
     const [questionNumber, setQuestionNumber] = useState(0)
     const [questions, setQuestions] = useState([{ question: "", options: {}, correctAnswer: "" }])
     const [userAnswers, setUserAnswers] = useState([])
-    const [currentAnswer, setCurrentAnswer] = useState("")
+    const [currentAnswer, setCurrentAnswer] = useState(" ")
     const [showScore, setShowScore] = useState(false)
     const [score, setScore] = useState(0)
 
     const location = useLocation()
+    const navigate = useNavigate()
 
     const handleOnComplete = () => {
         console.log("Completed");
@@ -48,56 +50,63 @@ export default function QuizView(props) {
         }
         setCurrentAnswer(value)
         userAnswers[questionNumber] = value
-        console.log(userAnswers)
     }
 
     //load all the questions
     useEffect(() => {
         axios.get(`${SERVER_HOST}/questions?quiz=${location.state.name}`, { params: { name: location.state.name } }).then((res) => {
-            console.log(res)
             const { name, questions } = res.data[0];
             setQuizDetails({ name });
             setQuestions(questions);
-
+            for (let i = 0; i<questions.length;i++){
+                userAnswers[i] = " "
+            }
         }).catch((e) => { console.log(e) })
     }, [])
 
     function displayNextQuestion(event) {
-        var x = () => { setQuestionNumber(questionNumber + 1); setCurrentAnswer("") }
-        if (questionNumber + 1 !== questions.length) {
-            x()
+        
+        if (questionNumber + 1 !== questions.length) { //if not end of questions
+            setQuestionNumber(questionNumber + 1); 
+            setCurrentAnswer(userAnswers[questionNumber+1])
         }
     }
 
     function displayPreviousQuestion(event) {
-        var x = () => { setQuestionNumber(questionNumber - 1); setCurrentAnswer(userAnswers[questionNumber]) }
-        if (questionNumber - 1 !== -1) x()
+        if (questionNumber - 1 !== -1){ //if not last question
+            setQuestionNumber(questionNumber - 1); 
+            setCurrentAnswer(userAnswers[questionNumber-1])
+        } 
     }
 
     function submitAnswers(event) {
         let newScore = 0
         userAnswers.map((item, index) => {
-            console.log(item)
-            console.log(questions[index].correctAnswer.toUpperCase())
             if (item === questions[index].correctAnswer.toUpperCase()) {
                 newScore += 1;
             }
             setScore(newScore)
         })
         setShowScore(true)
+
+    }
+
+    function reviewQuiz() {
+        setShowScore(false)
+        navigate("/dashboard/quiz-review",{state:{quizDetails,questions,userAnswers}})
     }
 
     function DisplayScore() {
         return (
-            <Dialog open={showScore} PaperProps={{ sx: { padding:"10px 20px"} }}>
+            <Dialog open={showScore} PaperProps={{ sx: { padding: "10px 20px" } }}>
                 <DialogContent >
                     <Stack gap={1} justifyContent={"center"} alignItems={"center"}>
-                        <Avatar src={complete} sx={{ width: "90px", aspectRaio: 1, height: "auto", bgcolor:purple200 }}></Avatar>
+                        <Avatar src={complete} sx={{ width: "90px", aspectRaio: 1, height: "auto", bgcolor: purple200 }}></Avatar>
                         <Typography>Score: {score}/{questions.length}</Typography>
                     </Stack>
                 </DialogContent>
                 <DialogActions>
-                    <Button variant="contained" onClick={() => setShowScore(false)}>Ok</Button>
+                    <Button variant="contained" onClick={reviewQuiz}>Ok</Button>
                 </DialogActions>
             </Dialog>
         )
@@ -140,7 +149,7 @@ export default function QuizView(props) {
                         <FormControlLabel control={<Radio />} id="option-D" label={`D. ${questions[questionNumber].options.d}`} value="D" className="option" sx={stylesheet.option} />
                     </Box>
                 </RadioGroup>
-                <Stack direction={"row"} justifyContent={"space-between"}>
+                <Stack direction={"row"} justifyContent={"space-between"} gap={1}>
                     <Button variant="contained" onClick={displayPreviousQuestion}>Previous</Button>
                     <Button variant="contained" onClick={submitAnswers}>Submit</Button>
                     <Button variant="contained" onClick={displayNextQuestion}>Next</Button>
