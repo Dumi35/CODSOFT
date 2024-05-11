@@ -14,7 +14,7 @@ const blue100 = "#0B69C1"
 export const grey200 = "#A09696"
 export const grey100 = "#E6F0F9"
 
-export const SERVER_HOST = process.env.SERVER_HOST || "http://192.168.22.106:4000"
+export const SERVER_HOST = process.env.SERVER_HOST || "http://localhost:4000"
 
 const theme = createTheme({
   palette: {

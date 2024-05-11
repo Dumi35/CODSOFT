@@ -8,8 +8,9 @@ const bcrypt = require("bcryptjs")
 const mongoose = require("mongoose")
 
 const SERVER_PORT = process.env.PORT || 4000
+//mongod --dbpath C:\Users\dumid\Desktop\CODSOFT\jobBoard\database --port 2721
 
-mongoose.connect("mongodb://192.168.22.106:2721/quizSite").then(()=>{
+mongoose.connect("mongodb://127.0.0.1:2721/quizSite").then(()=>{
     console.log("db connected")
     app.listen(SERVER_PORT, () => { console.log(`Server running on port ${SERVER_PORT}`) })
 }).catch((e)=>{console.log(e)})
@@ -74,4 +75,10 @@ app.get("/login", (req, res) => {
     }).catch((error) => {
         console.error(error)
     })
+})
+
+app.get("/questions",(req,res)=>{
+    let {name} = req.query
+    console.log("name",name)
+    quiz.find({name:name}).then((response)=>{res.send(response);console.log(response)}).catch((e)=>{console.log(e)})
 })

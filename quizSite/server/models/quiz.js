@@ -4,4 +4,4 @@ const quizSchema = mongoose.Schema({
     name:String
 })
 
-module.exports = mongoose.model("job_application", quizSchema)
+module.exports = mongoose.model("quiz", quizSchema)

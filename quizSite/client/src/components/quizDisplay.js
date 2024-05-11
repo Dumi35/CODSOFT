@@ -42,7 +42,7 @@ export default function QuizDisplay(props) {
     const startQuiz = () => {
         navigate(
              '/dashboard/quiz',
-              {state: {name:"wow"}} // your data array of objects
+              {state: {name:"Biology"}} // your data array of objects
         )
     }
 
