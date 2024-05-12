@@ -5,6 +5,7 @@ import { purple200 } from "../App"
 import starfire from "../assets/images/starfire.jpg"
 import axios from "axios"
 import { SERVER_HOST } from "../App"
+import {useNavigate} from "react-router-dom"
 
 function TabPanel({ children, value, index, content }) {
    return (
@@ -19,7 +20,14 @@ function TabPanel({ children, value, index, content }) {
    );
 }
 
+
 export default function Dashboard() {
+   const navigate = useNavigate()
+
+   function createQuiz(event){
+      navigate("/dashboard/create-quiz")
+   }
+
    const userEmail = sessionStorage.getItem("user_email") 
    const [tabValue, setTabValue] = useState(0);
    const [suggestedQuizzes, setSuggestedQuizzes] = useState([{}]);
@@ -80,6 +88,7 @@ export default function Dashboard() {
          <TabPanel value={tabValue} index={0} content={suggestedQuizzes}>
          </TabPanel>
          <TabPanel value={tabValue} index={1} content={personalQuizzes}>
+            <Button variant="contained" sx={{marginTop:"20px"}} onClick={createQuiz}>Create Quiz</Button>
          </TabPanel>
          <TabPanel value={tabValue} index={2} content={suggestedQuizzes}>
          </TabPanel>

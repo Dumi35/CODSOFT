@@ -7,6 +7,7 @@ import LogIn from "./elements/logIn";
 import Dashboard from "./elements/dashboard";
 import QuizView from "./elements/quizView";
 import QuizReview from "./elements/quizReview";
+import CreateQuiz from "./elements/createQuiz";
 
 
 //design variables
@@ -138,6 +139,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dashboard/quiz" element={<QuizView />} />
           <Route path="/dashboard/quiz-review" element={<QuizReview />} />
+          <Route path="/dashboard/create-quiz" element={<CreateQuiz />} />
 
         </Routes>
 

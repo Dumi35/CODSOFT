@@ -79,7 +79,7 @@ app.get("/login", (req, res) => {
 
 app.get("/suggested-quizzes",(req,res)=>{
     let {userEmail} = req.query
-    quiz.find({name:{$ne:userEmail}}).then((response)=>{
+    quiz.find({createdBy:{$ne:userEmail}}).then((response)=>{
         res.send(response)
     }).catch((e)=>{
         console.log(e)
@@ -88,8 +88,20 @@ app.get("/suggested-quizzes",(req,res)=>{
 
 app.get("/personal-quizzes",(req,res)=>{
     let {userEmail} = req.query
-    quiz.find({name:userEmail}).then((response)=>{
+    quiz.find({createdBy:userEmail}).then((response)=>{
         res.send(response)
+    }).catch((e)=>{
+        console.log(e)
+    })
+})
+
+app.post("/quiz",(req,res)=>{ 
+    console.log(req.body)
+    let {name,email,questions} = req.body
+    let newQuiz = new quiz({name,createdBy:email,quizDuration:"",questions})
+    newQuiz.save().then((response)=>{
+        res.send(response)
+        //console.log("quiz saved")
     }).catch((e)=>{
         console.log(e)
     })
