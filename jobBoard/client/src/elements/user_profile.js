@@ -19,44 +19,35 @@ const SmallAvatar = styled(Avatar)(({ theme }) => ({
 
 export default function UserProfile() {
 
-    const userEmail= sessionStorage.getItem("user_email")
+    const userEmail = sessionStorage.getItem("user_email")
     const userName = sessionStorage.getItem("user_name")
-    const phoneNumber= sessionStorage.getItem("phone_number")
-    const company=sessionStorage.getItem("company")
+    const phoneNumber = sessionStorage.getItem("phone_number")
+    const company = sessionStorage.getItem("company")
     //const [formJson,setFormJson] = useState({})
     var formData
 
-    const [disableEditBtn,setDisableEditBtn] = useState(true)
+    const [disableEditBtn, setDisableEditBtn] = useState(true)
 
-    function enableEditBtn(){
+    function enableEditBtn() {
         setDisableEditBtn(false)
     }
 
+    //edit and reset user details
     function editProfile(event) {
         event.preventDefault()
-        //console.log(formData)
         formData = new FormData(event.currentTarget)
         const formJson = Object.fromEntries(formData.entries())
         axios.post(`${SERVER_HOST}/edit-profile`, { ...formJson, user_email: userEmail }).then((res) => {
-           //console.log(res)
-           //window.location.href = window.location.href;
+            sessionStorage.setItem("user_name", formJson.name)
+            sessionStorage.setItem("user_email", formJson.email)
+            sessionStorage.setItem("phone_number", formJson.phone_number)
+            sessionStorage.setItem("company", formJson.company)
+            window.location.reload()
         }).catch((e) => {
             console.log(e)
         })
     }
 
-    //load user profile
-    useEffect(() => {
-        axios.get(`${SERVER_HOST}/load-profile?email=${userEmail}`, { userEmail }).then((res) => {
-            //console.log(res)
-            sessionStorage.setItem("user_name",res.data[0].name)
-            sessionStorage.setItem("user_email",res.data[0].email)
-            sessionStorage.setItem("phone_number",res.data[0].phone_number)
-            sessionStorage.setItem("company",res.data[0].company)
-        }).catch((e) => {
-            console.log(e)
-        })
-    }, [])
 
     return (
         <Box sx={{
@@ -79,7 +70,7 @@ export default function UserProfile() {
                             label="Full Name"
                             name="name"
                             fullWidth
-                            defaultValue = {`${userName}`}
+                            defaultValue={`${userName}`}
                             onChange={enableEditBtn}
                         />
                         <TextField
@@ -87,14 +78,14 @@ export default function UserProfile() {
                             type="email"
                             fullWidth
                             name="email"
-                            defaultValue = {`${userEmail}`}
+                            defaultValue={`${userEmail}`}
                             onChange={enableEditBtn}
                         />
                         <TextField
                             label="Company"
                             fullWidth
                             name="company"
-                            defaultValue = {`${company}`}
+                            defaultValue={`${company}`}
                             onChange={enableEditBtn}
                         />
                         <TextField
@@ -102,7 +93,7 @@ export default function UserProfile() {
                             type="tel"
                             name="phone_number"
                             fullWidth
-                            defaultValue = {`${phoneNumber}`}
+                            defaultValue={`${phoneNumber}`}
                             onChange={enableEditBtn}
                         />
 

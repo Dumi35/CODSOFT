@@ -272,6 +272,7 @@ app.post("/edit-profile", (req, res) => {
             company: company
         }
     }).then((response) => {
+        res.send(response)
         console.log("updated")
     }).catch((e) => {
         console.log(e)
