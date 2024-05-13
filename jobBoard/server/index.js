@@ -98,7 +98,7 @@ app.post("/postJobs", (req, res) => {
     const newJob = new postedJob({ job_title, job_poster, company, location, salary_range, bonus_if, about, minimum_requirements, job_type })
 
     newJob.save().then((response) => {
-
+        return res.send(response)
     }).catch((e) => { console.log(e) })
 })
 

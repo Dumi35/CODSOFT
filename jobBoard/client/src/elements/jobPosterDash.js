@@ -6,11 +6,12 @@ import { SERVER_HOST } from "../App";
 
 function PostJob(event){
     const job_poster = sessionStorage.getItem("user_name")
-    //event.preventDefault()
+    event.preventDefault()
     const formData = new FormData(event.currentTarget)
     const formJson = Object.fromEntries(formData.entries())
     axios.post(`${SERVER_HOST}/postJobs`,{...formJson,job_poster: job_poster}).then((res)=>{
         console.log(res)
+        window.location.reload()
     }).catch((e)=>{
         console.log(e)
     })
